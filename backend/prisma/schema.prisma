@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  reports   Report[]
+  
+  @@map("users")
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  userId      String
+  reportDate  DateTime
+  labName     String?
+  
+  // File information
+  originalFileName String?
+  fileType         String? // "pdf" or "jpg"
+  fileUrl          String? // if storing files
+  cloudinaryPublicId String?
+  // Processing status
+  processingStatus ProcessingStatus @default(PENDING)
+  extractedData    Json? // Raw JSON from Gemini
+  processingError  String? // Store error messages
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parameters Parameter[]
+  
+  @@map("reports")
+}
+
+model Parameter {
+  id          String @id @default(cuid())
+  reportId    String
+  
+  // Parameter details
+  name        String
+  value       String
+  unit        String?
+  normalRange String?
+  status      ParameterStatus
+  category    String?
+  riskLevel   RiskLevel
+  
+  // Additional metadata
+  notes       String?
+  flagged     Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  @@map("parameters")
+}
+
+// Enums
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ParameterStatus {
+  NORMAL
+  ABNORMAL
+  BORDERLINE
+  CRITICAL
+}
+
+enum RiskLevel {
+  LOW
+  BORDERLINE
+  HIGH
+  CRITICAL
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
