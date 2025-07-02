@@ -4,7 +4,7 @@ AI-Powered Medical Report Analysis Platform
 
 Transform your medical reports into actionable insights with cutting-edge AI technology. Upload PDFs or images and get instant parameter extraction, trend analysis, and personalized health recommendations.
 
-![ReportFlow Demo](https://via.placeholder.com/800x400/667eea/ffffff?text=ReportFlow+Dashboard)
+
 
 ## ✨ Features
 
