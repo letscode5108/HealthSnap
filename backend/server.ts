@@ -29,7 +29,7 @@ app.use(express.json({
   limit: '50mb',           // Increase JSON payload limit
   verify: (req, res, buf) => {
     // Optional: Log payload size for debugging
-    console.log(`Request payload size: ${(buf.length / 1024 / 1024).toFixed(2)}MB`);
+   // console.log(`Request payload size: ${(buf.length / 1024 / 1024).toFixed(2)}MB`);
   }
 }));
 
@@ -40,9 +40,9 @@ app.use(express.urlencoded({
 }));
 
 app.use((req, res, next) => {
-  console.log('Request Origin:', req.headers.origin);
-  console.log('Request Method:', req.method);
-  console.log('Request Headers:', req.headers);
+  // console.log('Request Origin:', req.headers.origin);
+  // console.log('Request Method:', req.method);
+  // console.log('Request Headers:', req.headers);
   next();
 });
 

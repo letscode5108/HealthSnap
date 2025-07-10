@@ -121,7 +121,7 @@ Rules:
     ]);
 
     const responseText = result.response.text();
-    console.log('Raw Gemini response:', responseText); // For debugging
+   // console.log('Raw Gemini response:', responseText); // For debugging
     
     // Parse the response with error handling
     const extractedData: GeminiResponse = parseGeminiJSON(responseText);

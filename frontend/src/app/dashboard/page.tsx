@@ -47,8 +47,19 @@ interface Insights {
   critical_parameters: string[];
 }
 
+interface MedicalReading {
+  date: string;
+  value: number;
+  status: string;
+  normalRange: string;
+}
+
+// Main data structure interface
+interface MedicalTrendData {
+  [key: string]: MedicalReading[];
+}
 // Mock trend data for demonstration
-const mockTrendData: Record<string, any[]> = {
+const mockTrendData:  MedicalTrendData = {
   'Hemoglobin': [
     { date: '2024-01-15', value: 12.5, status: 'NORMAL', normalRange: '12-16 g/dL' },
     { date: '2024-02-20', value: 11.8, status: 'BORDERLINE', normalRange: '12-16 g/dL' },
@@ -120,6 +131,7 @@ const MedicalReportsDashboard = () => {
 
   // Fetch user reports
   const fetchReports = async () => {
+     if (!user?.id) return;
     try {
       setLoading(true);
       const response = await fetch(`${API_BASE}/api/v1/reports/user/${user.id}`);
@@ -143,6 +155,7 @@ const MedicalReportsDashboard = () => {
 
   // Fetch trend data - using mock data for trends
   const fetchTrendData = async (parameter?: string) => {
+     if (!user?.id) return;
     try {
       setLoading(true);
       // For trends tab, use mock data
@@ -182,6 +195,7 @@ const MedicalReportsDashboard = () => {
 
   // Upload report
   const uploadReport = async (file: File) => {
+    if (!user?.id) return;
     try {
       setUploading(true);
       
@@ -338,7 +352,7 @@ const MedicalReportsDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-150 via-indigo-150 to-purple-150 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-900 to-slate-100">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -347,9 +361,9 @@ const MedicalReportsDashboard = () => {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
                 Medical Reports Dashboard
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-800 text-lg">
                 Welcome back, <span className="font-semibold text-indigo-600">{user.name || user.email}</span>! 
-                Manage and analyze your medical reports with AI-powered insights.
+                Manage and analyze your medical reports 
               </p>
             </div>
             <button
@@ -411,7 +425,7 @@ const MedicalReportsDashboard = () => {
                 return (
                   <button
                     key={tab.key}
-                    onClick={() => setActiveTab(tab.key as any)}
+                    onClick={() => setActiveTab(tab.key as 'reports' | 'trends' | 'insights')}
                     className={`flex items-center gap-2 py-3 px-6 rounded-lg font-medium text-sm transition-all duration-200 ${
                       activeTab === tab.key
                         ? `bg-gradient-to-r ${tab.color} text-white shadow-lg transform scale-105`
